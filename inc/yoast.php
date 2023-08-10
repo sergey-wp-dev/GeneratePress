@@ -10,6 +10,20 @@ function wpseo_remove_breadcrumb_link( $link_output , $link ){
 	return $link_output;
 }
 
+// add Locations item from breadcrumbs
+add_filter( 'wpseo_breadcrumb_links', 'yoast_seo_breadcrumb_append_link_locations' );
+function yoast_seo_breadcrumb_append_link_locations( $links ) {
+	global $post;
+	if ( is_singular ('locations') ) {
+		$breadcrumb[] = array(
+			'url' => site_url( '/locations/' ),
+			'text' => 'Locations',
+		);
+		array_splice( $links, 1, -2, $breadcrumb );
+	}
+	return $links;
+}
+
 // replace State breadcrumbs item without link
 add_filter( 'wpseo_breadcrumb_single_link' ,'wpseo_just_remove_breadcrumb_link', 10 ,2);
 function wpseo_just_remove_breadcrumb_link( $link_output , $link ){
@@ -35,7 +49,6 @@ function wpseo_just_remove_breadcrumb_link( $link_output , $link ){
 add_filter( 'wpseo_breadcrumb_links', 'yoast_seo_breadcrumb_append_last_item' );
 function yoast_seo_breadcrumb_append_last_item( $links ) {
 	global $post;
-
 	if ( is_singular ('locations')) {
 		$city = get_post_meta( get_the_ID(), 'osm_local_business_locality', true );
 		$breadcrumb[] = array(
@@ -43,6 +56,5 @@ function yoast_seo_breadcrumb_append_last_item( $links ) {
 		);
 		array_splice( $links, 3, 3, $breadcrumb );
 	}
-
 	return $links;
 }
