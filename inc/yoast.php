@@ -30,3 +30,19 @@ function wpseo_just_remove_breadcrumb_link( $link_output , $link ){
 	}
 	return $link_output;
 }
+
+// hide City page name
+add_filter( 'wpseo_breadcrumb_links', 'yoast_seo_breadcrumb_append_last_item' );
+function yoast_seo_breadcrumb_append_last_item( $links ) {
+	global $post;
+
+	if ( is_singular ('locations')) {
+		$city = get_post_meta( get_the_ID(), 'osm_local_business_locality', true );
+		$breadcrumb[] = array(
+			'text' => $city,
+		);
+		array_splice( $links, 3, 3, $breadcrumb );
+	}
+
+	return $links;
+}
