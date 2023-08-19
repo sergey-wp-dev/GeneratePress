@@ -58,3 +58,14 @@ function yoast_seo_breadcrumb_append_last_item( $links ) {
 	}
 	return $links;
 }
+
+// Remove Locations page (Locations archive page) and Blog page archive from breadcrumbs
+add_filter( 'wpseo_breadcrumb_links', function( $links ) {
+    if ( is_singular(['locations']) || is_tax('state') ) {
+        unset( $links[1] );
+  }
+    // Rebase array keys
+    $links = array_values( $links );
+    // Return modified array
+    return $links;
+});
